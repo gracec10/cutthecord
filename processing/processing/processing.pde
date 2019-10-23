@@ -5,20 +5,28 @@ import hypermedia.net.*;
 import processing.sound.*;
 SinOsc sine;
 
+int PORT = 57222;
+String IP = "192.168.1.2";
+
 UDP udp;  // define the UDP object
+
+int light;
 
 // art
 PImage space;
 Gif sun;
 SoundFile sos;
+float size = 200;
+float x = 720;
+float y = 450;
 
 void setup() {
-  udp = new UDP( this, 57222 );  // create a new datagram connection on port 6000
+  udp = new UDP( this, PORT, IP );  // create a new datagram connection on port 6000
   //udp.log( true );         // <-- printout the connection activity
   udp.listen( true );           // and wait for incoming message
-  sine = new SinOsc(this);
-  sine.freq(0);
-  sine.play();
+  //sine = new SinOsc(this);
+  //sine.freq(0);
+  //sine.play();
   
   // art
   fullScreen();
@@ -33,15 +41,21 @@ void setup() {
 
 void draw()
 {
-  
+  imageMode(CENTER);
+  image(space, x, y, 3000, 900);
+  image(sun, x, y, size, size);
 }
 
 void receive( byte[] data ) {          // <-- default handler
-  if (data != null) {
+  String value = new String(data);
+  light = int(value);
+  print(light);
+  size = light / 1.67;
   //void receive( byte[] data, String ip, int port ) {   // <-- extended handler
-  int data1 = 0;
-  for (int i=0; i < data.length; i++)
-    data1 = data1 * 10 + int(data[i]);
-  sine.freq(data1);
-  }
+  //float data1 = 0;
+  //for (int i=0; i < data.length; i++)
+  //  print(float(data));
+    //data1 = float(data[i]) / 1.67;
+  //size = data1;
+  //print(data1);
 }

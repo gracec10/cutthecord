@@ -7,6 +7,9 @@
 /* Put your SSID & Password */
 const char* ssid = "ESP32_Grace";  // Enter SSID here
 const char* password = "12345678";  //Enter Password here
+char* lightStr;
+
+float lightVal = 0;
 
 /* Put IP Address details */
 IPAddress local_ip(192,168,1,1);
@@ -28,9 +31,9 @@ void setup() {
 }
 
 void loop(){
-    int input = analogRead(32);
+    lightVal = analogRead(32);
     udp.beginPacket("192.168.1.2",57222);
-    udp.printf("%d\n", input);
+    udp.print(String(lightVal));
     udp.endPacket();
   
   //Wait for 1 second
